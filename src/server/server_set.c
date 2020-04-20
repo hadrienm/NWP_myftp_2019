@@ -47,7 +47,7 @@ int server_set_write_fdlist(ftp_t **ftp, client_t *client_list)
 
     for (client_t *tmp = client_list; tmp != NULL; tmp = tmp->next)
     {
-        if (tmp->write_buffer != NULL)
+        if (tmp->write_buffer != NULL || tmp->child_rfc_message != NULL)
         {
             FD_SET(tmp->fd, &(*ftp)->wset);
         }

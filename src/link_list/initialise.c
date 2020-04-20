@@ -16,6 +16,7 @@ static void initialise_client_variable(client_t **client_list)
     (*client_list)->ccfd = -1;
     (*client_list)->port = false;
     (*client_list)->connect = false;
+    (*client_list)->child_rfc_message = NULL;
 }
 
 /* Initalise all necessary variable of client structure */

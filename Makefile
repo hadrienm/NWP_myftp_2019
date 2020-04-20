@@ -39,7 +39,9 @@ SRCS	= ./main.c \
 	  ./src/server/command_gestion/rfc_command/port/port.c \
 	  ./src/server/command_gestion/rfc_command/pwd.c \
 	  ./src/server/command_gestion/rfc_command/quit.c \
+	  ./src/server/command_gestion/rfc_command/retr.c \
 	  ./src/server/command_gestion/rfc_command/user.c \
+	  ./src/server/command_gestion/send_data.c \
 	  ./src/server/connection.c \
 	  ./src/server/server_init.c \
 	  ./src/server/server_loop.c \

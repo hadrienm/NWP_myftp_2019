@@ -15,6 +15,7 @@ static void add_node_variable(client_t *new_node)
     new_node->ccfd = -1;
     new_node->port = false;
     new_node->connect = false;
+    new_node->child_rfc_message = NULL;
 }
 
 /* Add node inside client linked list

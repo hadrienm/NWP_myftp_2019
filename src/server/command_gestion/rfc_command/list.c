@@ -11,8 +11,6 @@ static bool list_error_gestion(client_t *client)
 {
     if (client->command == NULL)
         return false;
-    if (only_one_argument(client) == false)
-        return false;
     if (is_function(client, "list") == false)
         return false;
     if (check_user_log(client) == EXIT_FAILURE)
@@ -58,9 +56,9 @@ void list(client_t *client, ftp_t *ftp)
     while (!feof(file) && (fread(buff, 1, 1, file)) > 0)
         my_strcat(&client->child_write_buffer, buff);
     if (client->child_write_buffer != NULL)
-        my_const_strcat(&client->write_buffer, rfc_message[CODE_150]);
+        my_const_strcat(&client->child_rfc_message, rfc_message[CODE_150]);
     else
-        my_const_strcat(&client->write_buffer, rfc_message[CODE_550]);
+        my_const_strcat(&client->child_rfc_message, rfc_message[CODE_550]);
     pclose(file);
     free(command);
     free(client->command);

@@ -45,6 +45,8 @@ typedef struct client_s
     /* Contaon the date to send at user */
     char *write_buffer;
     char *child_write_buffer;
+    char *child_read_buffer;
+    char *child_rfc_message;
     char *username;
     char *password;
     /* Contain the input of the client */
@@ -173,6 +175,8 @@ int server_child_set_write_fdlist(ftp_t **ftp, client_t *client_list);
 bool pars_command(client_t *client_list);
 void excute_command(client_t **client_list, ftp_t *ftp);
 void log_client(client_t *client);
+void send_data(client_t **client_list, ftp_t *ftp);
+void send_child_data(client_t **client_list, ftp_t *ftp);
 
 /* Utilities function */
 char **str_to_array(char *str, char separator);
@@ -206,6 +210,7 @@ void cdup(client_t *client, ftp_t *ftp);
 void port(client_t *client, ftp_t *ftp);
 void pasv(client_t *client, ftp_t *ftp);
 void list(client_t *client, ftp_t *ftp);
+void retr(client_t *client, ftp_t *ftp);
 
 char *get_ipadress(client_t *client);
 int get_port(client_t *client);

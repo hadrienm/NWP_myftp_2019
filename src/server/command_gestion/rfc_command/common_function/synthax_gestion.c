@@ -58,7 +58,7 @@ bool more_one_argument(client_t *client)
     char **array = NULL;
 
     array = str_to_array(client->command, ' ');
-    if (size_of_array(array) < 2) {
+    if (size_of_array(array) != 2) {
         if (is_function(client, "CWD") == false)
             my_const_strcat(&client->write_buffer, rfc_message[CODE_501]);
         else

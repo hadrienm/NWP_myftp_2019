@@ -7,69 +7,12 @@
 
 #include "my_ftp.h"
 
-static void delete_child(size_t len, client_t *tmp)
+static char * pars_string(client_t *client, int size)
 {
-    if (len == strlen(tmp->child_write_buffer)) {
-        free(tmp->child_write_buffer);
-        tmp->child_write_buffer = NULL;
-        if (tmp->ccfd != -1)
-            close(tmp->ccfd);
-        close(tmp->scfd);
-        tmp->pasv = false;
-        tmp->port = false;
-        tmp->ccfd = -1;
-        tmp->scfd = -1;
-    }
-}
-
-static void send_child_data(client_t **client_list, ftp_t *ftp)
-{
-    size_t len = 0;
-
-    for (client_t *tmp = *client_list; tmp != NULL; tmp = tmp->next) {
-        if (tmp->child_write_buffer != NULL &&
-                FD_ISSET(tmp->ccfd, &ftp->wset) && tmp->pasv == true) {
-            len = write(tmp->ccfd, tmp->child_write_buffer,
-                strlen(tmp->child_write_buffer));
-            delete_child(len, tmp);
-            return;
-        }
-        if (tmp->child_write_buffer != NULL &&
-                FD_ISSET(tmp->scfd, &ftp->wset) &&
-                tmp->port == true && tmp->connect == true) {
-            len = write(tmp->scfd, tmp->child_write_buffer,
-                strlen(tmp->child_write_buffer));
-            delete_child(len, tmp);
-            return;
-        }
-    }
-}
-
-static void send_data(client_t **client_list, ftp_t *ftp)
-{
-    size_t len = 0;
-
-    for (client_t *tmp = (*client_list); tmp != NULL; tmp = tmp->next) {
-        if (tmp->write_buffer != NULL && FD_ISSET(tmp->fd, &ftp->wset)) {
-            len = write(tmp->fd, tmp->write_buffer,
-                    strlen(tmp->write_buffer));
-            if (len == strlen(tmp->write_buffer)) {
-                free(tmp->write_buffer);
-                tmp->write_buffer = NULL;
-            }
-            return;
-        }
-    }
-}
-
-void delete_useless_space(client_t *client)
-{
-    int size = 0;
     char *tmp = NULL;
     bool space = false;
 
-    size = strlen(client->command);
-    tmp = alloca(sizeof(char) * (size + 1));
+    tmp = malloc(sizeof(char) * (size + 1));
     memset(tmp, '\0', size + 1);
     for (int a = 0, index = 0; client->command[a] != '\0'; ++a) {
         if (client->command[a] == ' ' && space == false &&
@@ -83,8 +26,22 @@ void delete_useless_space(client_t *client)
             space = false;
         }
     }
+    return tmp;
+}
+
+void delete_useless_space(client_t *client)
+{
+    int size = 0;
+    char *tmp = NULL;
+
+    size = strlen(client->command);
+    tmp = pars_string(client, size);
     free(client->command);
-    client->command = strdup(tmp);
+    if (strlen(tmp) != 0)
+        client->command = strdup(tmp);
+    else
+        client->command = strdup(" ");
+    free(tmp);
 }
 
 void excute_command(client_t **client_list, ftp_t *ftp)

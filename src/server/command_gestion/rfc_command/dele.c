@@ -39,7 +39,7 @@ static char *found_path(client_t *client, ftp_t *ftp)
 
 static void delete_file(client_t *client, ftp_t *ftp)
 {
-    char *str = found_path(client, ftp);;
+    char *str = found_path(client, ftp);
 
     send_rfc_message(client, str);
     free(str);

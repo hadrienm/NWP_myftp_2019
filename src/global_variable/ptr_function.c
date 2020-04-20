@@ -9,4 +9,4 @@
 
 void (*const rfc_command[])(client_t *client, ftp_t *ftp) =
     {quit, user, pass, pwd, help, noop, cwd, dele, cdup, port, pasv,
-    list, NULL};
+    list, retr, NULL};
